@@ -1,7 +1,3 @@
-// const axios = require('axios')
-// const url = 'http://checkip.amazonaws.com/';
-let response
-
 /**
  *
  * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
@@ -16,19 +12,23 @@ let response
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 exports.lambdaHandler = async (event, context) => {
-  try {
-    // const ret = await axios(url);
-    response = {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'hello world'
-        // location: ret.data.trim()
-      })
-    }
-  } catch (err) {
-    console.log(err)
-    return err
-  }
+  const awsServerlessExpress = require('aws-serverless-express')
+  const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 
-  return await response
+  const express = require('express')
+  const { Nuxt } = require('nuxt')
+  const app = express()
+
+  // Import and Set Nuxt.js options
+  const config = require('../nuxt.config.js')
+  config.dev = process.env.NODE_ENV !== 'production'
+
+  const nuxt = new Nuxt(config)
+
+  app.use(nuxt.render)
+  app.use(awsServerlessExpressMiddleware.eventContext())
+
+  const server = awsServerlessExpress.createServer(app)
+
+  return await awsServerlessExpress.proxy(server, event, context)
 }

@@ -1,5 +1,12 @@
 # mexican-dying-sam
 
+エラーの再現方法 🍻✨
+1. このプロジェクトを clone する
+2. `yarn install` する
+3. [Credential の設定](https://github.com/mexican-particles/mexican-dying-sam#5-credencial-%E3%81%AE%E8%A8%AD%E5%AE%9A%E3%82%92%E3%81%99%E3%82%8B) する
+4. `make local-start-api` する
+5. http://localhost:3000/hello にアクセスしてみる
+
 ## 構築に関するメモ
 
 ### 1. プロジェクトの初期化
@@ -80,9 +87,9 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 - Makefile
 - credentials.example
 
-`cp -p credentials{.example,}`
-
 ### 5. credencial の設定をする
+
+`cp -p credentials{.example,}` しておく
 
 1. 以下のポリシーをアタッチしたグループを作成する
    - arn:aws:iam::aws:policy/AWSLambdaFullAccess
@@ -140,3 +147,21 @@ t-kono@P325:~/repos/mexican-dying-sam (master *)
 
 app.js について lint が通るように微調整する
 * ここで一旦コミット
+
+### 7. aws-serverless-express を導入して proxy させる
+
+1. `yarn add aws-serverless-express` する
+2. template.yaml と server/app.js の記述を変更する
+3. `make local-start-api` する
+4. http://localhost:3000/hello にアクセスしてみる
+
+```bash
+Mounting /app as /var/task:ro,delegated inside runtime container
+Starting a timer for 3 seconds for function 'HelloWorldFunction'
+Lambda returned empty body!
+Invalid API Gateway Response Keys: {'keepAliveTimeout', '_binaryTypes', '_pipeName', '_eventsCount', 'timeout', '_connectionKey', '_usingWorkers', '_connections', 'pauseOnConnect', 'maxHeadersCount', '_handle', 'headersTimeout', 'httpAllowHalfOpen', '_socketPathSuffix', '_unref', '_workers', 'allowHalfOpen', '_events'} in {'_events': {'listening': [None, None]}, '_eventsCount': 5, '_connections': 0, '_handle': {}, '_usingWorkers': False, '_workers': [], '_unref': False, 'allowHalfOpen': True, 'pauseOnConnect': False, 'httpAllowHalfOpen': False, 'timeout': 120000, 'keepAliveTimeout': 5000, 'maxHeadersCount': None, 'headersTimeout': 40000, '_socketPathSuffix': '3kzxo1sxw5', '_binaryTypes': [], '_pipeName': '/tmp/server-3kzxo1sxw5.sock', '_connectionKey': '-1:/tmp/server-3kzxo1sxw5.sock:-1'}
+<class 'samcli.local.apigw.local_apigw_service.LambdaResponseParseException'>
+2020-04-17 08:17:51 192.168.0.1 - - [17/Apr/2020 08:17:51] "GET /hello HTTP/1.1" 502 -
+```
+
+おしまい
