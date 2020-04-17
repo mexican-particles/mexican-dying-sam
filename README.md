@@ -33,7 +33,7 @@ yarn run v1.21.1
 ...
 ```
 
-### 2. Nuxt.js まわりのフォルダを `/app` 以下にまとめる
+### 2. Nuxt.js まわりのフォルダを `/app` 以下にまとめて微調整する
 - `/app` フォルダを作成し、以下のフォルダを `/app` 以下に移動する
     - assets
     - components
@@ -47,6 +47,9 @@ yarn run v1.21.1
   - https://ja.nuxtjs.org/api/configuration-srcdir/
 - tsconfig.js について `"baseUrl": "./app"` に変更
   - https://www.typescriptlang.org/docs/handbook/module-resolution.html#base-url
+* tailwind.config.js のスタイルを直す
+* nuxtconfig.js に `// eslint-disable-next-line @typescript-eslint/no-unused-vars` を追記する
+
 
 ### 3. Build Setup を叩いて疎通確認する
 
@@ -69,7 +72,30 @@ $ yarn generate
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
-### 4. 微調整する
-* tailwind.config.js のスタイルを直す
-* nuxtconfig.js に `// eslint-disable-next-line @typescript-eslint/no-unused-vars` を追記する
+* ここで一旦コミット
+
+### 4. aws, sam コマンドを叩けるコンテナのためのファイルを追加する
+- docker-compose.yaml
+- Dockerfile
+- Makefile
+- credentials.example
+
+`cp -p credentials{.example,}`
+
+### 5. credencial の設定をする
+
+1. 以下のポリシーをアタッチしたグループを作成する
+   - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+   - arn:aws:iam::aws:policy/IAMFullAccess
+   - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+   - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+2. ユーザを上記グループに追加する
+3. ユーザのアクセスキーを発行する
+4. `credentials` ファイルについて、発行された値で埋める
+
+設定値が正しく反映されているとき `make identity` でアカウント情報を確認できる  
+cf. https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-profiles.html
+
+**注意： Credential 情報は、絶対にコミットに含めないこと**
+
 * ここで一旦コミット
