@@ -99,3 +99,44 @@ cf. https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-profile
 **注意： Credential 情報は、絶対にコミットに含めないこと**
 
 * ここで一旦コミット
+
+### 6. sam コマンドによる初期化を行う
+
+```bash
+(*'-')< $ docker-compose run dind sam init --runtime nodejs12.x --name mexico --app-template hello-world
+
+	SAM CLI now collects telemetry to better understand customer needs.
+
+	You can OPT OUT and disable telemetry collection by setting the
+	environment variable SAM_CLI_TELEMETRY=0 in your shell.
+	Thanks for your help!
+
+	Learn More: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-telemetry.html
+
+
+Cloning app templates from https://github.com/awslabs/aws-sam-cli-app-templates.git
+
+-----------------------
+Generating application:
+-----------------------
+Name: mexico
+Runtime: nodejs12.x
+Dependency Manager: npm
+Application Template: hello-world
+Output Directory: .
+
+Next steps can be found in the README file at ./mexico/README.md
+    
+t-kono@P325:~/repos/mexican-dying-sam (master *)
+(*'-')< $ mv mexico/events .
+t-kono@P325:~/repos/mexican-dying-sam (master *)
+(*'-')< $ mv mexico/hello-world/app.js server/
+t-kono@P325:~/repos/mexican-dying-sam (master *)
+(*'-')< $ mv mexico/template.yaml .
+t-kono@P325:~/repos/mexican-dying-sam (master *)
+(*'-')< $ rm -rf mexico
+t-kono@P325:~/repos/mexican-dying-sam (master *)
+```
+
+app.js について lint が通るように微調整する
+* ここで一旦コミット
